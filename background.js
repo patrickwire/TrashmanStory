@@ -8,6 +8,8 @@ var lastupdate = d.getTime();
 var lasthost = "";
 var hostrepeatcounter = 0;
 
+
+
 var urls=["https://www.reddit.com/r/cats","http://bing.com/?q=cats","http://boards.4chan.org/an/"]
 
 function getUrl(){
@@ -35,6 +37,9 @@ function loadNewPage(newurl) {
 		lasthost = nexthost;
 	}
     chrome.tabs.update(curtab.id,{url:newurl});
+		setTimeout(function(){
+			chrome.tabs.sendMessage(t.id, {text: 'overlay'});
+		},1000)
 	setTimeout(function(){
 		 chrome.tabs.sendMessage(curtab.id, {text: 'report_back'}, loadNewPage);
 	 },2000)
@@ -55,6 +60,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 	if(request.text === 'start'){
 		doStart();
 	}
+
 });
 function doStart() {
 	chrome.tabs.create({url: getUrl()}, function(t){

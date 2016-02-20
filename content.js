@@ -14,6 +14,9 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
       //  alert("hi from content script"); //DOESN'T WORK ... do we ever get in here?
       grabLink(sendResponse)
     }
+
+        document.body.innerHTML += '<div style="position:fixed;top:0;left:0;right:0;bottom:0;z-index:100;background:url('+chrome.extension.getURL("overlay_right.png")+');background-position:bottom;background-repeat:no-repeat"></div>';
+
 });
 
 function grabLink(sendResponse) {
@@ -67,3 +70,8 @@ function replaceSrc()
 }
 
 replaceSrc();
+
+window.onunload = function() {
+   alert('by by Honey')
+};
+//document.body.innerHTML += '<div style="position:fixed;top:0;left:0;right:0;bottom:0;z-index:100;background:url('+chrome.extension.getURL("overlay_right.png")+');background-position:bottom;background-repeat:no-repeat"></div>';
