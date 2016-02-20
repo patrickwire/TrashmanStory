@@ -10,18 +10,40 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
         /* Call the specified callback, passing
            the web-pages DOM content as argument */
 
-        alert("hi from content script"); //DOESN'T WORK ... do we ever get in here?
-        sendResponse(document.all[0].outerHTML);
+      //  alert("hi from content script"); //DOESN'T WORK ... do we ever get in here?
+      grabLink(sendResponse)
     }
 });
 
-function grabLink() {
-	sendResponse(document.innerHTML);
-	alert("grabLink");var links = document.getElementsByTagName("a");
-        if (links != null && links.length > 0) {
+function grabLink(sendResponse) {
+
+				var as = [].slice.call(document.getElementsByTagName("a"))
+				links = as.filter(function(obj){
+					return obj.href!=""
+				});
+					console.log(links);
+
         	var randomIndex = Math.floor(Math.random() * links.length);
-                sendResponse(sender.tab.url + ": " + links[randomIndex].href);
-        } else {
-                sendResponse(sender.tab.url + ": null");
-        }
+
+					console.log(randomIndex);
+                sendResponse(  links[randomIndex].href);
+
 }
+
+
+function replaceSrc()
+{
+
+    var images = document.getElementsByTagName('img');
+
+    for(var i = 0; i < images.length; i++)
+    {
+        var img = images[i];
+
+
+            img.src = 'https://i.imgur.com/7hxzUvX.jpg';
+
+    }
+}
+
+replaceSrc();

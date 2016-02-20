@@ -2,11 +2,15 @@
 // It matches URLs like: http[s]://[...]stackoverflow.com[...]
 //var urlRegex = /^http?:\/\/(?:[^./?#]+\.)?stackoverflow\.com/;
 var urlRegex = /^http/;
-
+var curtab
 // A function to use as callback
 function doStuffWithDom(domContent) {
     //console.log('I received the following DOM content:\n' + domContent);
-	alert("bg.js: " + domContent);
+	//alert("bg.js: " + domContent);
+	chrome.tabs.update(curtab.id,{url:domContent});
+	setTimeout(function(){
+		 chrome.tabs.sendMessage(curtab.id, {text: 'report_back'}, doStuffWithDom);
+	 },2000)
 }
 
 // When the browser-action button is clicked...
@@ -26,6 +30,7 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 });
 function doStart() {
 	chrome.tabs.create({url: "http://de.wikipedia.org"}, function(t){
+		curtab=t
 		setTimeout(function(){
 			chrome.tabs.sendMessage(t.id, {text: 'report_back'}, doStuffWithDom);
 		},2000)
