@@ -55,7 +55,11 @@
         width: 22px;
         height: 23px;
       }
-      #log {visibility: hidden;}
+      #log {
+        position: fixed;
+        width: 100%; height: 100%; top:0;left:0;
+        background-color: rgba(0, 0, 0, 0.95);
+      }
       li {font-family: monospace;font-size: 12px;}
       ul{
         height: 300px;
@@ -67,7 +71,6 @@
         top:0;left:0;
         height: 100%;
         width: 100%;
-        visibility: hidden;
         background-color: rgba(0,0,0,0.95);
         text-align: center;
       }
@@ -83,8 +86,8 @@
         <a id="logButton" href="#"> </a>
       </div>
     </div>
-    <div id="overlay"><img src="images/info.png"></div>
-    <div id="log">
+    <div id="overlay" style="visibility: hidden;"><img src="images/info.png"></div>
+    <div id="log" style="visibility: hidden;">
       Log
       <ul>
         <li style="display:none"></li>

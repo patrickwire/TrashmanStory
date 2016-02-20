@@ -1,6 +1,7 @@
 var link = document.getElementById('start');
 var info = document.getElementById('overlayButton');
 var logButton = document.getElementById('logButton');
+var logBox = document.getElementById('log');
 var overlay = document.getElementById('overlay');
 var logToggle = false;
 function start() {
@@ -11,7 +12,8 @@ document.addEventListener('DOMContentLoaded', function(){
 	link.addEventListener('click', start);
 	info.addEventListener('click', showInfo);
 	overlay.addEventListener('click', hideInfo);
-	logButton.addEventListener('click', toggleLog);
+	logButton.addEventListener('click', showLog);
+	logBox.addEventListener('click', hideLog);
 });
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse){
 	if (msg.text && (msg.text == "logging")) {
@@ -29,8 +31,9 @@ function showInfo() {
 function hideInfo() {
 	overlay.style.visibility = 'hidden';
 }
-function toggleLog() {
-	var logBox = document.getElementById('log');
-	logToggle = !logToggle;
-	logBox.style.visibility = logToggle?'visible':'hidden';
+function showLog() {
+	logBox.style.visibility = 'visible';
+}
+function hideLog() {
+	logBox.style.visibility = 'hidden';
 }
