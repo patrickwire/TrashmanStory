@@ -90,6 +90,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 	if(request.text === 'start'){
 		doStart();
 	}
+	if(request.text === 'stop'){
+		 chrome.tabs.remove(curtab.id, function() { });
+		killThis();
+	}
 
 });
 function doStart() {
@@ -142,6 +146,7 @@ if(tabId==curtab.id){
 })
 
 function killThis(){
+		chrome.runtime.sendMessage({text:"stoped"});
 	clearInterval(intervalStuck)
 	clearInterval(intervalReset)
 	chrome.browserAction.setIcon({path:"favicon_off.png"})
