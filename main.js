@@ -1,6 +1,8 @@
 var link = document.getElementById('start');
 var info = document.getElementById('overlayButton');
+var logButton = document.getElementById('logButton');
 var overlay = document.getElementById('overlay');
+var logToggle = false;
 function start() {
 	chrome.runtime.sendMessage({text: 'start'});
 	link.style.backgroundImage = "url('images/on.png')";
@@ -9,6 +11,7 @@ document.addEventListener('DOMContentLoaded', function(){
 	link.addEventListener('click', start);
 	info.addEventListener('click', showInfo);
 	overlay.addEventListener('click', hideInfo);
+	logButton.addEventListener('click', toggleLog);
 });
 chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse){
 	if (msg.text && (msg.text == "logging")) {
@@ -25,4 +28,9 @@ function showInfo() {
 }
 function hideInfo() {
 	overlay.style.visibility = 'hidden';
+}
+function toggleLog() {
+	var logBox = document.getElementById('log');
+	logToggle = !logToggle;
+	logBox.style.visibility = logToggle?'visible':'hidden';
 }
