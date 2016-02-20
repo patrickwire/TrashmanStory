@@ -23,7 +23,7 @@ urls=urlcat.hiphop;
 
 function getUrl(){
 	var randomIndex = Math.floor(Math.random() * urls.length);
-	return urls[randomIndex]
+	return urls[randomIndex]+"&first="+Math.floor(Math.random() * 50);
 }
 
 function getLocation(href) {
@@ -36,7 +36,8 @@ function getLocation(href) {
 function loadNewPage(data) {
 	newurl=data.url
 	if(token!=data.token){
-		chrome.runtime.sendMessage({text:"logging", info: nexthost+"...OLDER THAN DINOS..."+newurl});
+		if(data.title.length>0)
+		chrome.runtime.sendMessage({text:"logging",info:data.title/* info: nexthost+"...OLDER THAN DINOS..."+newurl*/});
 
 		return
 	}
@@ -52,7 +53,8 @@ function loadNewPage(data) {
 		return;
 	}
 	console.log(nexthost);
-	chrome.runtime.sendMessage({text:"logging", info: nexthost+"..."+newurl});
+	if(data.title.length>0)
+	chrome.runtime.sendMessage({text:"logging", info: data.title/*nexthost+"..."+newurl*/});
 	if (nexthost == lasthost) {
 		hostrepeatcounter++;
 		if (hostrepeatcounter > 10) {

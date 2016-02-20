@@ -4,7 +4,7 @@
 	}
 });*/
 
-var blacklist=["mail","sign","log","edit","delete","remove","pdf","#","jpg","jpeg","png","chrome","itunes","porn","sex","javascript","gif","mp3","xml","rss","acc","zip","mp4",".exe",".dmg"]
+var blacklist=["microsoft","bing","mail","sign","log","edit","delete","remove","pdf","#","jpg","jpeg","png","chrome","itunes","porn","sex","javascript","gif","mp3","xml","rss","acc","zip","mp4",".exe",".dmg","tel:"]
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
   setInterval(function(){
     window.scrollBy(0, 25);
@@ -37,14 +37,14 @@ function grabLink(sendResponse,token) {
 					window.removeEventListener('onbeforeunload',true)
 					window.removeEventListener('onbeforeunload',false)
 					if(links.length<3){
-						sendResponse({url:"NOLINK",token:token});
+						sendResponse({url:"NOLINK",token:token,title:document.title});
 
 						return
 					}
         	var randomIndex = Math.floor(Math.random() * links.length);
 
 					console.log(randomIndex);
-                sendResponse({url:links[randomIndex].href,token:token});
+                sendResponse({url:links[randomIndex].href,token:token,title:document.title});
 								links[randomIndex].removeEventListener('click',true)
 								links[randomIndex].removeEventListener('click',false)
 								//links[randomIndex].click()
