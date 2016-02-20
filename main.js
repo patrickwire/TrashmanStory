@@ -3,10 +3,23 @@ var info = document.getElementById('overlayButton');
 var logButton = document.getElementById('logButton');
 var logBox = document.getElementById('log');
 var overlay = document.getElementById('overlay');
+
+var on=false;
 var logToggle = false;
 function start() {
-	chrome.runtime.sendMessage({text: 'start'});
-	link.style.backgroundImage = "url('images/on.png')";
+	on=!on
+	if(on){
+		chrome.runtime.sendMessage({text: 'start'});
+		link.style.backgroundImage = "url('images/on.png')";
+	}else{
+		chrome.runtime.sendMessage({text: 'stop'});
+		link.style.backgroundImage = "url('images/off.png')";
+	}
+
+}
+function stop() {
+	chrome.runtime.sendMessage({text: 'stop'});
+	link.style.backgroundImage = "url('images/off.png')";
 }
 document.addEventListener('DOMContentLoaded', function(){
 	link.addEventListener('click', start);
@@ -23,6 +36,10 @@ chrome.runtime.onMessage.addListener(function (msg, sender, sendResponse){
 		var infoMessage = document.createTextNode( myDate + ":" + msg.info);
 		entry.appendChild(infoMessage);
 		logList.insertBefore(entry,logList.childNodes[0]);
+	}
+	if (msg.text && (msg.text == "stoped")) {
+		link.style.backgroundImage = "url('images/off.png')";
+		on=false;
 	}
 });
 function showInfo() {
