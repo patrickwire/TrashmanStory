@@ -6,20 +6,23 @@
 
 var blacklist=["mail","sign","log","edit","delete","remove","pdf","#","jpg","jpeg","png","chrome","itunes","porn","sex","javascript","gif","mp3","xml","rss","acc","zip","mp4"]
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
+  setInterval(function(){
+    window.scrollBy(5, 0);
+  },500)
     /* If the received message has the expected format... */
     if (msg.text && (msg.text == "report_back")) {
         /* Call the specified callback, passing
            the web-pages DOM content as argument */
 
       //  alert("hi from content script"); //DOESN'T WORK ... do we ever get in here?
-      grabLink(sendResponse)
+      grabLink(sendResponse,msg.token)
     }
 
         //document.body.innerHTML += '<div style="position:fixed;top:0;left:0;right:0;bottom:0;z-index:100;background:url('+chrome.extension.getURL("overlay_right.png")+');background-position:bottom;background-repeat:no-repeat"></div>';
 
 });
 
-function grabLink(sendResponse) {
+function grabLink(sendResponse,token) {
 
 				var as = [].slice.call(document.getElementsByTagName("a"))
 				links = as.filter(function(obj){
@@ -34,14 +37,14 @@ function grabLink(sendResponse) {
 					window.removeEventListener('onbeforeunload',true)
 					window.removeEventListener('onbeforeunload',false)
 					if(links.length<3){
-						sendResponse(document.referrer);
-						window.history.back();
+						sendResponse({url:document.referrer,token:token});
+
 						return
 					}
         	var randomIndex = Math.floor(Math.random() * links.length);
 
 					console.log(randomIndex);
-                sendResponse(links[randomIndex].href);
+                sendResponse({url:links[randomIndex].href,token:token});
 								links[randomIndex].removeEventListener('click',true)
 								links[randomIndex].removeEventListener('click',false)
 								//links[randomIndex].click()

@@ -10,9 +10,15 @@ var hostrepeatcounter = 0;
 var counter=0;
 var intervalReset;
 var intervalStuck;
+var token;
 
 
 var urls=["https://www.reddit.com/r/cats","http://amazon.com/","http://bing.com/?q=bagger","http://bing.com/?q=samurai","http://bing.com/?q=ninja","http://bing.com/?q=kran","http://bing.com/?q=cats","http://boards.4chan.org/an/"]
+var urlcat={hiphop:["http://bing.com/?q=hiphop", "http://bing.com/?q=rap", "http://bing.com/?q=breakdance", "http://bing.com/?q=graffiti", "http://bing.com/?q=djing", "http://bing.com/?q=gangstarap", "http://bing.com/?q=hiphop%20releases", "http://bing.com/?q=deutschrap", "http://bing.com/?q=sprechgesang", "http://bing.com/?q=hiphop%20tourdates", "http://bing.com/?q=hiphop%20release"],
+						japan:["http://bing.com/?q=japan", "http://bing.com/?q=sushi%20bestellen", "http://bing.com/?q=japanisch%20lernen", "http://bing.com/?q=sumoringen", "http://bing.com/?q=samurei", "http://bing.com/?q=roher%20fisch", "http://bing.com/?q=kois%20zuechten", "http://bing.com/?q=fruehlingsfest", "http://bing.com/?q=japanisch", "http://bing.com/?q=hokkaido", "http://bing.com/?q=okinawa"],
+					detective:["http://bing.com/?q=detektivbedarf", "http://bing.com/?q=sicherheitsbedarf", "http://bing.com/?q=überwachungskamera%20kaufen", "http://bing.com/?q=was%20soll%20ich%20mit%20meinem%20leben%20anstellen???", "http://bing.com/?q=abhörtechnik", "http://bing.com/?q=detektivbedarf", "http://bing.com/?q=nachtsichtgeräte", "http://bing.com/?q=teleobjektive", "http://bing.com/?q=undercover", "http://bing.com/?q=abhörschutz"
+]}
+
 
 function getUrl(){
 	var randomIndex = Math.floor(Math.random() * urls.length);
@@ -26,7 +32,13 @@ function getLocation(href) {
 }
 
 // A function to use as callback
-function loadNewPage(newurl) {
+function loadNewPage(data) {
+	newurl=data.url
+	if(token!=data.token){
+		chrome.runtime.sendMessage({text:"logging", info: nexthost+"...OLDER THAN DINOS..."+newurl});
+
+		return
+	}
 	if(newurl.indexOf(chrome.runtime.id)!=-1){
 
 		killThis()
@@ -34,6 +46,10 @@ function loadNewPage(newurl) {
 	}
 	counter++
 	nexthost = getLocation(newurl).hostname;
+	if(nexthost.indexOf(chrome.runtime.id)!=-1){
+		restartTrash();
+		return;
+	}
 	console.log(nexthost);
 	chrome.runtime.sendMessage({text:"logging", info: nexthost+"..."+newurl});
 	if (nexthost == lasthost) {
@@ -49,7 +65,8 @@ function loadNewPage(newurl) {
     chrome.tabs.update(curtab.id,{url:newurl});
 
 	setTimeout(function(){
-		 chrome.tabs.sendMessage(curtab.id, {text: 'report_back'}, loadNewPage);
+		token=Date.now()
+		 chrome.tabs.sendMessage(curtab.id, {text: 'report_back',token:token}, loadNewPage);
 	 },3000)
 	 lastupdate = d.getTime();
 }
@@ -75,21 +92,28 @@ function doStart() {
 	chrome.tabs.create({url: getUrl()}, function(t){
 		curtab=t
 		setTimeout(function(){
-			chrome.tabs.sendMessage(t.id, {text: 'report_back'}, loadNewPage);
+			token=Date.now()
+			chrome.tabs.sendMessage(t.id, {text: 'report_back',token:token}, loadNewPage);
 		},2000)
 	});
 	intervalStuck=setInterval(function(){
-		if(lastupdate+5000 <= d.getTime()){
+		if(lastupdate+10000 <= d.getTime()){
 			restartTrash()
+			lastupdate=0;
 		}
 
 
-	},5000)
+	},10000)
 	intervalReset=setInterval(restartTrash,60000)
 }
 function restartTrash(){
-	chrome.tabs.update(curtab.id,{url:getUrl()});
-	chrome.tabs.sendMessage(curtab.id, {text: 'report_back'}, loadNewPage);
+	lastupdate=0;
+	chrome.runtime.sendMessage({text:"logging", info: "restart"});
+	var newlink=getUrl()
+	chrome.runtime.sendMessage({text:"logging", info: newlink});
+	chrome.tabs.update(curtab.id,{url:newlink});
+	token=Date.now();
+	chrome.tabs.sendMessage(curtab.id, {text: 'report_back',token:token}, loadNewPage);
 }
 
 
