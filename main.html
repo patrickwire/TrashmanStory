@@ -1,7 +1,7 @@
 <!doctype html>
 <html>
   <head>
-    <title>Trashmen Story</title>
+    <title>Trashman Story</title>
     <style>
       body {
           font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
@@ -47,6 +47,15 @@
         width: 13px;
         height: 23px;
       }
+      #logButton {
+        position: absolute;
+        top: 65px;
+        right: -150px;
+        background-image: url('images/statistik.png');
+        width: 22px;
+        height: 23px;
+      }
+      #log {visibility: hidden;}
       li {font-family: monospace;font-size: 12px;}
       ul{
         height: 300px;
@@ -67,10 +76,11 @@
   <body>
     <div id="outer">
       <div id="page">
-        <h1 id="logo"><img src="images/logo.png" alt="Trashmen Stories"></h1>
+        <h1 id="logo"><img src="images/logo.png" alt="Trashman Stories"></h1>
         <a id="start" href="#"></a>
         <div id="profiles"></div>
         <a id="overlayButton" href="#"> </a>
+        <a id="logButton" href="#"> </a>
       </div>
     </div>
     <div id="overlay"><img src="images/info.png"></div>
