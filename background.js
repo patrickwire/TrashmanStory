@@ -3,14 +3,19 @@
 //var urlRegex = /^http?:\/\/(?:[^./?#]+\.)?stackoverflow\.com/;
 var urlRegex = /^http/;
 var curtab
+var d = new Date();
+var lastupdate = d.getTime();
+
+
 // A function to use as callback
 function doStuffWithDom(domContent) {
     //console.log('I received the following DOM content:\n' + domContent);
 	//alert("bg.js: " + domContent);
-	chrome.tabs.update(curtab.id,{url:domContent});
+	//chrome.tabs.update(curtab.id,{url:domContent});
 	setTimeout(function(){
 		 chrome.tabs.sendMessage(curtab.id, {text: 'report_back'}, doStuffWithDom);
 	 },2000)
+	 lastupdate = d.getTime();
 }
 
 // When the browser-action button is clicked...
@@ -35,4 +40,20 @@ function doStart() {
 			chrome.tabs.sendMessage(t.id, {text: 'report_back'}, doStuffWithDom);
 		},2000)
 	});
+	setInterval(function(){
+		if(lastupdate+5000 <= d.getTime()){
+			chrome.tabs.update(curtab.id,{url:"https://bing.com?q=cats"});
+			chrome.tabs.sendMessage(curtab.id, {text: 'report_back'}, doStuffWithDom);
+		}
+
+
+	},5000)
+	setInterval(function(){
+
+			chrome.tabs.update(curtab.id,{url:"https://bing.com?q=cats"});
+			chrome.tabs.sendMessage(curtab.id, {text: 'report_back'}, doStuffWithDom);
+
+
+
+	},10000000000)
 }
