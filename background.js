@@ -7,7 +7,9 @@ var d = new Date();
 var lastupdate = d.getTime();
 var lasthost = "";
 var hostrepeatcounter = 0;
-
+var counter=0;
+var intervalReset;
+var intervalStuck;
 
 
 var urls=["https://www.reddit.com/r/cats","http://bing.com/?q=cats","http://boards.4chan.org/an/"]
@@ -25,25 +27,30 @@ function getLocation(href) {
 
 // A function to use as callback
 function loadNewPage(newurl) {
+	if(newurl.indexOf(chrome.runtime.id)!=-1){
+
+		killThis()
+		return
+	}
+	counter++
 	nexthost = getLocation(newurl).hostname;
 	console.log(nexthost);
-	chrome.runtime.sendMessage({text:"logging", info: nexthost});
+	chrome.runtime.sendMessage({text:"logging", info: nexthost+"..."+newurl});
 	if (nexthost == lasthost) {
 		hostrepeatcounter++;
 		if (hostrepeatcounter > 10) {
 			restartTrash();
+			return;
 		}
 	} else {
 		hostrepeatcounter = 0;
 		lasthost = nexthost;
 	}
     chrome.tabs.update(curtab.id,{url:newurl});
-		setTimeout(function(){
-			chrome.tabs.sendMessage(t.id, {text: 'overlay'});
-		},1000)
+
 	setTimeout(function(){
 		 chrome.tabs.sendMessage(curtab.id, {text: 'report_back'}, loadNewPage);
-	 },2000)
+	 },3000)
 	 lastupdate = d.getTime();
 }
 
@@ -64,22 +71,37 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 
 });
 function doStart() {
+	chrome.browserAction.setIcon({path:"favicon_on.png"})
 	chrome.tabs.create({url: getUrl()}, function(t){
 		curtab=t
 		setTimeout(function(){
 			chrome.tabs.sendMessage(t.id, {text: 'report_back'}, loadNewPage);
 		},2000)
 	});
-	setInterval(function(){
+	intervalStuck=setInterval(function(){
 		if(lastupdate+5000 <= d.getTime()){
 			restartTrash()
 		}
 
 
 	},5000)
-	setInterval(restartTrash,60000)
+	intervalReset=setInterval(restartTrash,60000)
 }
 function restartTrash(){
 	chrome.tabs.update(curtab.id,{url:getUrl()});
 	chrome.tabs.sendMessage(curtab.id, {text: 'report_back'}, loadNewPage);
+}
+
+
+chrome.tabs.onRemoved.addListener(function(tabId, removeInfo){
+if(tabId==curtab.id){
+	killThis()
+}
+
+})
+
+function killThis(){
+	clearInterval(intervalStuck)
+	clearInterval(intervalReset)
+	chrome.browserAction.setIcon({path:"favicon_off.png"})
 }

@@ -4,7 +4,7 @@
 	}
 });*/
 
-var blacklist=["mail","sign","log","edit","delete","remove","pdf","#","jpg","jpeg","png","chrome","itunes"]
+var blacklist=["mail","sign","log","edit","delete","remove","pdf","#","jpg","jpeg","png","chrome","itunes","porn","sex","javascript"]
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
     /* If the received message has the expected format... */
     if (msg.text && (msg.text == "report_back")) {
@@ -15,7 +15,7 @@ chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
       grabLink(sendResponse)
     }
 
-        document.body.innerHTML += '<div style="position:fixed;top:0;left:0;right:0;bottom:0;z-index:100;background:url('+chrome.extension.getURL("overlay_right.png")+');background-position:bottom;background-repeat:no-repeat"></div>';
+        //document.body.innerHTML += '<div style="position:fixed;top:0;left:0;right:0;bottom:0;z-index:100;background:url('+chrome.extension.getURL("overlay_right.png")+');background-position:bottom;background-repeat:no-repeat"></div>';
 
 });
 
