@@ -4,14 +4,48 @@
     <title>Trashmen Story</title>
     <style>
       body {
-        font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
-        font-size: 100%;
-        width: 500px;
-	min-height: 300px;
+          font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+          font-size: 100%;
+          width: 100%;
+	        min-height: 100%;
+          heigth: 100%;
+          background-color: #212121;
+          color: #ccc;
       }
+      #outer {text-align: center;}
+      #page {
+        margin: 104px 10%;
+        min-width: 492px;
+        min-height: 600px;
+        /*border: 1px solid white;*/
+        position: relative;
+        display: inline-block;
+      }
+      #logo {position: absolute;top: 0; left:0;}
       #start {
-        padding: 10px;
-        background-color: #c0c0c0;
+        position: absolute;
+        top: 25px; right:0;
+        background-image: url('images/off.png');
+        background-position: top right;
+        width: 160px; height: 23px;
+        text-decoration: none;
+      }
+      #start:hover {}
+      #profiles {
+        position: absolute;
+        left: 0;
+        top: 155px;
+        width: 492px;
+        height: 332px;
+        background-image: url('images/naked.png');
+      }
+      #overlayButton {
+        position: absolute;
+        top: 25px;
+        right: -150px;
+        background-image: url('images/fragezeichen.png');
+        width: 13px;
+        height: 23px;
       }
       li {font-family: monospace;font-size: 12px;}
       ul{
@@ -19,17 +53,31 @@
         overflow-y: scroll;
         list-style-type: none;
       }
+      #overlay {
+        position: absolute;
+        top:0;left:0;
+        height: 100%;
+        width: 100%;
+        visibility: hidden;
+        background-color: rgba(0,0,0,0.95);
+        text-align: center;
+      }
     </style>
   </head>
   <body>
-    <h1>Trashmen Stories</h1>
-    <p>Hier ist die Hauptseite der Extention</p>
-    <p><a id="start">Starte trash surfen</a></p>
+    <div id="outer">
+      <div id="page">
+        <h1 id="logo"><img src="images/logo.png" alt="Trashmen Stories"></h1>
+        <a id="start" href="#"></a>
+        <div id="profiles"></div>
+        <a id="overlayButton" href="#"> </a>
+      </div>
+    </div>
+    <div id="overlay"><img src="images/info.png"></div>
     <div id="log">
+      Log
       <ul>
-        <li style="display:none"
-
-        ></li>
+        <li style="display:none"></li>
       </ul>
     </div>
   </body>
