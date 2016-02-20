@@ -4,7 +4,7 @@
 	}
 });*/
 
-var blacklist=["mail","sign","log","edit","delete","remove","pdf","#","jpg","jpeg","png","chrome","itunes","porn","sex","javascript"]
+var blacklist=["mail","sign","log","edit","delete","remove","pdf","#","jpg","jpeg","png","chrome","itunes","porn","sex","javascript","gif","mp3","xml","rss","acc","zip","mp4"]
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
     /* If the received message has the expected format... */
     if (msg.text && (msg.text == "report_back")) {

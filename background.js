@@ -12,7 +12,7 @@ var intervalReset;
 var intervalStuck;
 
 
-var urls=["https://www.reddit.com/r/cats","http://bing.com/?q=cats","http://boards.4chan.org/an/"]
+var urls=["https://www.reddit.com/r/cats","http://amazon.com/","http://bing.com/?q=bagger","http://bing.com/?q=samurai","http://bing.com/?q=ninja","http://bing.com/?q=kran","http://bing.com/?q=cats","http://boards.4chan.org/an/"]
 
 function getUrl(){
 	var randomIndex = Math.floor(Math.random() * urls.length);
