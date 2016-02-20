@@ -4,6 +4,7 @@
 	}
 });*/
 
+var blacklist=["mail","sign","log","edit","delete","remove","pdf","#","jpg","jpeg","png","chrome","itunes"]
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
     /* If the received message has the expected format... */
     if (msg.text && (msg.text == "report_back")) {
@@ -19,10 +20,16 @@ function grabLink(sendResponse) {
 
 				var as = [].slice.call(document.getElementsByTagName("a"))
 				links = as.filter(function(obj){
-					return obj.href!="" && obj.href.indexOf("#")!=0
+					for (i in blacklist){
+						if(obj.href.toLowerCase().indexOf(blacklist[i])!=-1){
+							return false;
+						}
+					}
+					return obj.href!="" && obj.href.indexOf("#")!=0 && obj.href.indexOf("mailto")==-1&& obj.href.indexOf("pdf")==-1 && obj.href.indexOf("jpg")==-1&& obj.href.indexOf("png")==-1
 				});
 					console.log(links);
-					window.removeEventListener('onbeforeunload')
+					window.removeEventListener('onbeforeunload',true)
+					window.removeEventListener('onbeforeunload',false)
 					if(links.length<3){
 						sendResponse(document.referrer);
 						window.history.back();
@@ -32,8 +39,9 @@ function grabLink(sendResponse) {
 
 					console.log(randomIndex);
                 sendResponse(links[randomIndex].href);
-								links[randomIndex].removeEventListener('click')
-								links[randomIndex].click()
+								links[randomIndex].removeEventListener('click',true)
+								links[randomIndex].removeEventListener('click',false)
+								//links[randomIndex].click()
 
 }
 
