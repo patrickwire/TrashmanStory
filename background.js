@@ -19,6 +19,7 @@ var urlcat={hiphop:["http://bing.com/?q=hiphop", "http://bing.com/?q=rap", "http
 					detective:["http://bing.com/?q=detektivbedarf", "http://bing.com/?q=sicherheitsbedarf", "http://bing.com/?q=überwachungskamera%20kaufen", "http://bing.com/?q=was%20soll%20ich%20mit%20meinem%20leben%20anstellen???", "http://bing.com/?q=abhörtechnik", "http://bing.com/?q=detektivbedarf", "http://bing.com/?q=nachtsichtgeräte", "http://bing.com/?q=teleobjektive", "http://bing.com/?q=undercover", "http://bing.com/?q=abhörschutz"
 ]}
 
+urls=urlcat.hiphop;
 
 function getUrl(){
 	var randomIndex = Math.floor(Math.random() * urls.length);
@@ -47,7 +48,7 @@ function loadNewPage(data) {
 	counter++
 	nexthost = getLocation(newurl).hostname;
 	if(nexthost.indexOf(chrome.runtime.id)!=-1){
-		restartTrash();
+
 		return;
 	}
 	console.log(nexthost);
@@ -56,6 +57,7 @@ function loadNewPage(data) {
 		hostrepeatcounter++;
 		if (hostrepeatcounter > 10) {
 			restartTrash();
+			hostrepeatcounter=0;
 			return;
 		}
 	} else {
@@ -63,7 +65,10 @@ function loadNewPage(data) {
 		lasthost = nexthost;
 	}
     chrome.tabs.update(curtab.id,{url:newurl});
+		setTimeout(function(){
 
+			 chrome.tabs.sendMessage(curtab.id, {text: 'scroll'});
+		 },500)
 	setTimeout(function(){
 		token=Date.now()
 		 chrome.tabs.sendMessage(curtab.id, {text: 'report_back',token:token}, loadNewPage);
@@ -92,6 +97,10 @@ function doStart() {
 	chrome.tabs.create({url: getUrl()}, function(t){
 		curtab=t
 		setTimeout(function(){
+
+			 chrome.tabs.sendMessage(curtab.id, {text: 'scroll'});
+		 },500)
+		setTimeout(function(){
 			token=Date.now()
 			chrome.tabs.sendMessage(t.id, {text: 'report_back',token:token}, loadNewPage);
 		},2000)
@@ -99,7 +108,7 @@ function doStart() {
 	intervalStuck=setInterval(function(){
 		if(lastupdate+10000 <= d.getTime()){
 			restartTrash()
-			lastupdate=0;
+			;
 		}
 
 
@@ -107,13 +116,21 @@ function doStart() {
 	intervalReset=setInterval(restartTrash,60000)
 }
 function restartTrash(){
-	lastupdate=0;
+	lastupdate = d.getTime();
 	chrome.runtime.sendMessage({text:"logging", info: "restart"});
 	var newlink=getUrl()
 	chrome.runtime.sendMessage({text:"logging", info: newlink});
 	chrome.tabs.update(curtab.id,{url:newlink});
+	setTimeout(function(){
+
+		 chrome.tabs.sendMessage(curtab.id, {text: 'scroll'});
+	 },500)
+
+	setTimeout(function(){
 	token=Date.now();
-	chrome.tabs.sendMessage(curtab.id, {text: 'report_back',token:token}, loadNewPage);
+		chrome.tabs.sendMessage(curtab.id, {text: 'report_back',token:token}, loadNewPage);
+
+	 },3000)
 }
 
 

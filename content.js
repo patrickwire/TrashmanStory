@@ -4,11 +4,11 @@
 	}
 });*/
 
-var blacklist=["mail","sign","log","edit","delete","remove","pdf","#","jpg","jpeg","png","chrome","itunes","porn","sex","javascript","gif","mp3","xml","rss","acc","zip","mp4"]
+var blacklist=["mail","sign","log","edit","delete","remove","pdf","#","jpg","jpeg","png","chrome","itunes","porn","sex","javascript","gif","mp3","xml","rss","acc","zip","mp4",".exe",".dmg"]
 chrome.runtime.onMessage.addListener(function(msg, sender, sendResponse) {
   setInterval(function(){
-    window.scrollBy(5, 0);
-  },500)
+    window.scrollBy(0, 25);
+  },50)
     /* If the received message has the expected format... */
     if (msg.text && (msg.text == "report_back")) {
         /* Call the specified callback, passing
@@ -37,7 +37,7 @@ function grabLink(sendResponse,token) {
 					window.removeEventListener('onbeforeunload',true)
 					window.removeEventListener('onbeforeunload',false)
 					if(links.length<3){
-						sendResponse({url:document.referrer,token:token});
+						sendResponse({url:"NOLINK",token:token});
 
 						return
 					}
