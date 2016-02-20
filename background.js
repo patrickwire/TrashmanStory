@@ -1,4 +1,4 @@
-// Regex-pattern to check URLs against. 
+// Regex-pattern to check URLs against.
 // It matches URLs like: http[s]://[...]stackoverflow.com[...]
 //var urlRegex = /^http?:\/\/(?:[^./?#]+\.)?stackoverflow\.com/;
 var urlRegex = /^http/;
@@ -25,7 +25,9 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse){
 	}
 });
 function doStart() {
-	chrome.tabs.create({url: "http://de.wikipedia.org"}, function(t){ 
-		chrome.tabs.sendMessage(t.id, {text: 'report_back'}, doStuffWithDom);
+	chrome.tabs.create({url: "http://de.wikipedia.org"}, function(t){
+		setTimeout(function(){
+			chrome.tabs.sendMessage(t.id, {text: 'report_back'}, doStuffWithDom);
+		},2000)
 	});
 }
