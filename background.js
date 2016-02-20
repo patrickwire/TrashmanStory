@@ -25,6 +25,7 @@ function getLocation(href) {
 function loadNewPage(newurl) {
 	nexthost = getLocation(newurl).hostname;
 	console.log(nexthost);
+	chrome.runtime.sendMessage({text:"logging", info: nexthost});
 	if (nexthost == lasthost) {
 		hostrepeatcounter++;
 		if (hostrepeatcounter > 10) {
