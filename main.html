@@ -3,8 +3,12 @@
   <head>
     <title>Trashman Story</title>
     <style>
+    @font-face {
+     font-family: "Rooney Sans Heavy";
+     src: url('fonts/rooneysansheavy.woff') format("woff");
+    }
       body {
-          font-family: "Segoe UI", "Lucida Grande", Tahoma, sans-serif;
+          font-family: "Rooney Sans Heavy","Segoe UI", "Lucida Grande", Tahoma, sans-serif;
           font-size: 100%;
           width: 100%;
 	        min-height: 100%;
@@ -59,12 +63,19 @@
         position: fixed;
         width: 100%; height: 100%; top:0;left:0;
         background-color: rgba(0, 0, 0, 0.95);
+        padding-top: 30px;
       }
-      li {font-family: monospace;font-size: 12px;}
+      #log h2 {
+        display: block;
+      }
+      li {font-family: "Rooney Sans Heavy",monospace;font-size: 12px;}
       ul{
-        height: 300px;
+        height: 80%;
         overflow-y: scroll;
         list-style-type: none;
+        text-align: left;
+        display: inline-block;
+        max-width: 500px;
       }
       #overlay {
         position: absolute;
@@ -88,10 +99,12 @@
     </div>
     <div id="overlay" style="visibility: hidden;"><img src="images/info.png"></div>
     <div id="log" style="visibility: hidden;">
-      Log
-      <ul>
-        <li style="display:none"></li>
-      </ul>
+      <center>
+        <h2>Log</h2>
+        <ul>
+          <li style="display:none"></li>
+        </ul>
+      </center>
     </div>
   </body>
   <script src="main.js"></script>
